@@ -6,6 +6,14 @@
 
 
 
+## 在线使用
+
+
+
+\[打开 Copy Checker](https://guaaha.github.io/copy-checker/)
+
+
+
 ## 功能
 
 
@@ -17,7 +25,7 @@
 
 
 
-## 使用方法
+## 下载到本地使用
 
 
 
