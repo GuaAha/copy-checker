@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>我的文案检查器</title>
+
+<style>
+  body { font-family: sans-serif; max-width: 600px; margin: 60px auto; padding: 20px; }
+  textarea { width: 100%; min-height: 120px; font: inherit; }
+  #result { color: #000000; }
+  #result.over-limit { color: #FF0000; }
+</style>
+
+<h1>我的文案检查器</h1>
+<label for="copy">输入文案，检查是否超过自定长度：</label>
+<textarea id="copy"></textarea>
+<button id="clear" type="button">一键清空</button>
+<p><output id="result">等待输入</output></p>
+
+<script>
+const limit = 12;
+const input = document.getElementById("copy");
+const result = document.getElementById("result");
+const clearButton = document.getElementById("clear");
+
+function updateCount() {
+  // ① 根据输入框当前的文字，重新计算字数
+  const count = Array.from(input.value).length;
+  // ② 根据字数，重新判断是否超限
+  const status = count > limit
+  ? "已超出 " + (count - limit) + " 个字符"
+  : "还可输入 " + (limit - count) + " 个字符";
+  // ③ 把新的字数和判断结果显示到网页上
+  result.textContent = count + " / " + limit + "，" + status;
+  result.classList.toggle("over-limit", count > limit);
+}
+
+input.addEventListener("input", updateCount);
+
+clearButton.addEventListener("click", () => {
+  input.value = "";
+  updateCount();
+  input.focus();
+});
+
+updateCount();
+</script>
+</html>
