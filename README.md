@@ -10,7 +10,7 @@
 
 
 
-\[打开 Copy Checker](https://guaaha.github.io/copy-checker/)
+[打开 Copy Checker](https://guaaha.github.io/copy-checker/)
 
 
 
