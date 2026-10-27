@@ -30,6 +30,16 @@ const limitInput = document.getElementById("limit");
 const updateLimitButton = document.getElementById("update-limit");
 const limitError = document.getElementById("limit-error");
 
+try {
+  const savedLimit = Number(localStorage.getItem("copy-checker-limit"));
+  if (Number.isInteger(savedLimit) && savedLimit >= 1 && savedLimit <= 10000) {
+    limit = savedLimit;
+  }
+} catch {
+  limitError.textContent = "浏览器无法读取已保存的上限，当前使用默认上限12。";
+}
+limitInput.value = String(limit);
+
 function updateCount() {
   // ① 根据输入框当前的文字，重新计算字数
   const count = Array.from(input.value).length;
@@ -66,6 +76,11 @@ updateLimitButton.addEventListener("click", () => {
 
   limit = newLimit;
   updateCount();
+  try {
+    localStorage.setItem("copy-checker-limit", String(limit));
+  } catch {
+    limitError.textContent = "上限已在当前页面更新，但浏览器无法保存，刷新后可能无法保留。";
+  }
 });
 
 clearButton.addEventListener("click", () => {
