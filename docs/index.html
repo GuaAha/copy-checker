@@ -11,16 +11,24 @@
 </style>
 
 <h1>我的文案检查器</h1>
+<label for="limit">字符上限</label>
+<input id="limit" type="number" min="1" max="10000" step="1" value="12" required aria-describedby="limit-hint limit-error">
+<button id="update-limit" type="button">更新上限</button>
+<p id="limit-hint">输入1–10000之间的整数（包含两端），点击“更新上限”后生效。</p>
+<p id="limit-error" role="alert"></p>
 <label for="copy">输入文案，检查是否超过自定长度：</label>
 <textarea id="copy"></textarea>
 <button id="clear" type="button">一键清空</button>
 <p><output id="result">等待输入</output></p>
 
 <script>
-const limit = 12;
+let limit = 12;
 const input = document.getElementById("copy");
 const result = document.getElementById("result");
 const clearButton = document.getElementById("clear");
+const limitInput = document.getElementById("limit");
+const updateLimitButton = document.getElementById("update-limit");
+const limitError = document.getElementById("limit-error");
 
 function updateCount() {
   // ① 根据输入框当前的文字，重新计算字数
@@ -35,6 +43,30 @@ function updateCount() {
 }
 
 input.addEventListener("input", updateCount);
+
+updateLimitButton.addEventListener("click", () => {
+  const newLimit = limitInput.valueAsNumber;
+  let error = "";
+
+  if (limitInput.validity.badInput) {
+    error = "请输入1–10000之间的整数。";
+  } else if (limitInput.value === "") {
+    error = "无法将字符数量设置为空，目前已保留最近一次字符数量上限。";
+  } else if (!Number.isInteger(newLimit)) {
+    error = "字符数量无法含小数，请输入整数。";
+  } else if (newLimit < 1) {
+    error = "字符数量至少为1个，请设置为1–10000之间的整数。";
+  } else if (newLimit > 10000) {
+    error = "超过字符数量上限，请设置为1–10000之间的整数。";
+  }
+
+  limitError.textContent = error;
+  limitInput.setAttribute("aria-invalid", error !== "");
+  if (error !== "") return;
+
+  limit = newLimit;
+  updateCount();
+});
 
 clearButton.addEventListener("click", () => {
   input.value = "";
